@@ -1,0 +1,101 @@
+Day 1: Linux User Setup with Non-Interactive Shell
+
+Description : To create a user named "Devops_guy"with a non-interactive shell (so the user cannot log in interactively) on a Linux system.
+you can use the useradd command and set the shell to /usr/sbin/nologin (or) /bin/false depending on your distro). 
+
+Why ?
+
+This task is needed mainly for security and system management purposes:
+
+Prevent interactive login:
+	Sometimes you need a user account for running background services, scripts, or daemons, not for someone to log in.
+	Setting a non-interactive shell ensures the account cannot be used to access the system directly.
+
+Limit security risks:
+	Accounts that don’t need login access but exist for system processes could be exploited if they had normal shells.
+	Using /usr/sbin/nologin or /bin/false reduces the attack surface.
+
+Organizational or administrative purposes:
+	Some system users (like www-data, mysql, or custom service users) are created this way to own files, run processes, or manage permissions without being interactive accounts.
+
+In short: it’s about creating an account for system use without giving interactive login privileges, keeping the system safer and cleaner.
+	
+	
+A real-world usecase
+
+Example 1: Running a Web Server
+Scenario: You install Apache or Nginx on a Linux server.
+Requirement: The web server needs a user to own and run its processes, but you don’t want anyone logging in as that user.
+
+Solution:
+The system creates a user like www-data (Debian/Ubuntu) or apache (RHEL/CentOS).
+This user has a non-interactive shell (/usr/sbin/nologin).
+
+Benefits:
+The web server can read/write its files safely under its own user.
+No human can log in as www-data, preventing potential misuse if credentials were compromised.
+
+Example 2 :
+Database services like MySQL or PostgreSQL create mysql/postgres users for running the database process. These users are non-login accounts, just like Devops_Guy in your task.
+So the task is essentially about creating a safe system-only account.	
+	
+	
+	
+	Step 1:
+	Open the terminal
+	You need a terminal with root privileges because creating users requires admin rights.
+	
+	Step 2: 
+	Choose a non-interactive shell
+	A non-interactive shell means the user cannot log in interactively (cannot open a normal shell session).
+	Common options:
+	/usr/sbin/nologin  → Prevents login and shows a message like “This account is not available.”
+	/bin/false         → Prevents login silently (no message).
+	We’ll use /usr/sbin/nologin here.
+	
+	Step 3: 
+	Create the user
+	Use the useradd command:
+	sudo useradd -s /usr/sbin/nologin Devops_Guy
+	
+	
+	Explanation:
+	sudo 					→ run the command as root
+	useradd 				→ command to create a new user
+	-s /usr/sbin/nologin 	→ sets the shell for the user
+	Devops_Guy 				→ the username
+	
+	Step 4: 
+	Set a password (optional)
+	If you want to set a password (even if the user cannot log in):
+	sudo passwd Devops_Guy
+	It will ask you to enter and confirm the password.
+	
+	Note: Even with a password, the user still cannot log in interactively because the shell is non-interactive.
+	
+	Step 5: 
+	Verify the user
+	
+	Check the user entry in /etc/passwd:
+	grep Devops_Guy /etc/passwd
+	You should see something like:
+	Devops_Guy:x:1001:1001::/home/Devops_Guy:/usr/sbin/nologin
+	
+	
+	Last part /usr/sbin/nologin confirms the user cannot log in interactively.
+	 
+	 
+	 
+One-liner command that creates the user Devops_Guy with a home directory, sets a password, and assigns a non-interactive shell:	
+	command: sudo useradd -m -s /usr/sbin/nologin Devops_Guy && echo "Devops_Guy:YourPasswordHere" | sudo chpasswd
+	
+	
+	Step-by-step explanation :
+
+sudo useradd	  		→ Run as root to create a user.
+-m 						→ Create a home directory /home/Devops_Guy.
+-s /usr/sbin/nologin 	→ Assign a non-interactive shell.
+Devops_Guy 				→ The username.
+&& 						→ Only if the previous command succeeds, run the next part.
+echo "Devops_Guy:YourPasswordHere" | sudo chpasswd → Set the password for Devops_Guy.
+Important: Replace YourPasswordHere with a strong password.
