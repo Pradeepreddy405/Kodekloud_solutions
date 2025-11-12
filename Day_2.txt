@@ -1,0 +1,61 @@
+Objective : Create a temporary user account on Linux that:
+
+	    Has an expiry date/time
+
+	    (Optionally) has limited permissions or access scope
+
+	    Can be automatically removed or disabled after expiry
+
+
+Step-by-Step: Create a Temporary User with Expiry
+
+Step 1: Check prerequisites
+
+You’ll need root or sudo privileges.
+
+sudo su -
+
+
+Step 2: Create the user
+Use the useradd command with the -e (expiry) flag.
+Syntax:sudo useradd -e YYYY-MM-DD username
+
+Example:sudo useradd -m -e 2025-11-15 tempuser
+This creates a user tempuser that expires on Nov 15, 2025.
+The -m flag creates a home directory (/home/tempuser).
+
+ 
+Step 3: Set password
+sudo passwd tempuser
+The user can now log in until the expiry date.
+
+Step 4: Verify expiry date
+sudo chage -l tempuser
+
+You’ll see something like:
+
+Account expires : Nov 15, 2025
+Password expires : never
+Last password change : today
+
+
+
+Task Usage in real world scenarios : 
+
+1.Temporary Access for Contractors or Interns
+	When a third-party consultant, contractor, or intern needs system access for a short period:
+	You can create a user that automatically expires when their contract ends.
+	This avoids leaving orphaned accounts that could become security risks later.
+
+2.Testing or Development Accounts
+	Developers or QA testers often need temporary logins to test specific configurations or applications.
+	Prevents test accounts from lingering indefinitely.
+	Keeps system user lists clean and organized.
+3. Training or Lab Environments
+	In a training setup or classroom environment:
+	Each student gets a temporary account valid for the session duration.
+	After the course or exam, accounts automatically expire.
+4. Automation and Cleanup
+	In automated environments (like CI/CD servers or cloud instances):
+	Temporary users can be created by scripts for tasks or testing.
+	Expiry ensures they’re removed without manual intervention.
