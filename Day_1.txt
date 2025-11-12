@@ -7,15 +7,15 @@ Why ?
 
 This task is needed mainly for security and system management purposes:
 
-Prevent interactive login:
+1: Prevent interactive login:
 	Sometimes you need a user account for running background services, scripts, or daemons, not for someone to log in.
 	Setting a non-interactive shell ensures the account cannot be used to access the system directly.
 
-Limit security risks:
+2: Limit security risks:
 	Accounts that don’t need login access but exist for system processes could be exploited if they had normal shells.
 	Using /usr/sbin/nologin or /bin/false reduces the attack surface.
 
-Organizational or administrative purposes:
+3: Organizational or administrative purposes:
 	Some system users (like www-data, mysql, or custom service users) are created this way to own files, run processes, or manage permissions without being interactive accounts.
 
 In short: it’s about creating an account for system use without giving interactive login privileges, keeping the system safer and cleaner.
@@ -24,7 +24,7 @@ In short: it’s about creating an account for system use without giving interac
 A real-world usecase
 
 Example 1: Running a Web Server
-Scenario: You install Apache or Nginx on a Linux server.
+Scenario - 1 : You install Apache or Nginx on a Linux server.
 Requirement: The web server needs a user to own and run its processes, but you don’t want anyone logging in as that user.
 
 Solution:
@@ -35,7 +35,7 @@ Benefits:
 The web server can read/write its files safely under its own user.
 No human can log in as www-data, preventing potential misuse if credentials were compromised.
 
-Example 2 :
+Scenario - 2 :
 Database services like MySQL or PostgreSQL create mysql/postgres users for running the database process. These users are non-login accounts, just like Devops_Guy in your task.
 So the task is essentially about creating a safe system-only account.	
 	
