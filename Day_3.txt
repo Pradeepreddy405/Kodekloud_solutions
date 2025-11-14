@@ -1,0 +1,53 @@
+Task Description : Disabling direct SSH root login
+
+Disabling direct SSH root login is a basic but very important security step on any Linux machine.
+Disabling direct SSH root login makes your Linux machine much harder to hack, easier to audit, and safer to use.
+It forces people to log in normally first, which is a much more secure way to manage a server.
+
+1.	Root has full power
+	The root account can do anything on the system — delete files, change settings, access all data.
+	If someone gets the root password, they instantly control the whole machine.
+	
+2. Hackers often target the root user
+	Attackers know the username “root” exists on every Linux system.
+	That means they only need to guess the password.
+	By disabling root login, you remove an easy, common target.
+	
+3. Better to log in as a normal user first
+	A safer practice is:
+	Log in with a regular user
+	Use sudo to run admin commands
+	This gives better tracking, because you can see who did what, instead of everything showing as “root”.
+	
+4.  Protects the system from mistakes
+	When logged in directly as root, a simple typo can break the system.
+	Using sudo reduces accidental damage.
+	
+	
+Task Procedure step by step :
+
+Step 1: Edit the SSH daemon configuration file
+	 	Open the SSH config file with your preferred editor:
+		sudo nano /etc/ssh/sshd_config
+
+Step 2: Find and modify the PermitRootLogin directive
+		Locate the line:
+		#PermitRootLogin yes
+		Change it to:
+		PermitRootLogin no
+		If the line is missing, add it manually.
+
+Step 3: (Optional) Ensure password authentication isn't enabling root login indirectly
+You may also want to disable password authentication:
+PasswordAuthentication no
+(Only do this if you have SSH keys set up, or you’ll lock yourself out.)
+
+Step 4: Restart the SSH service
+		Apply the changes:
+		sudo systemctl restart sshd
+		Some distros use:
+		sudo systemctl restart ssh
+		
+Step 5: Verify
+		Try logging in as root; it should now fail:
+		ssh root@your_server_ip
