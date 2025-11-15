@@ -1,0 +1,148 @@
+File permissions are one of the core concepts in Linux security
+
+
+1.What File Permissions Are
+		
+		In Linux, every file and directory has permissions that determine:
+		
+		Who can access it
+		What they can do with it
+		
+		There are three categories of users:
+		Owner (u) → the person who created the file
+		Group (g) → users in the same group as the owner
+		Others (o) → everyone else
+		
+2. The Three Permission Types
+		Each user category can have three kinds of permissions:
+		
+		Symbol	Name	Meaning for a File	Meaning for a Directory
+		r		Read	Can view file contents	Can list directory contents
+		w		Write	Can modify the file	Can create/delete inside dir
+		x		Execute	Can run the file as a program	Can enter (cd) the directory
+		
+3. Viewing Permissions
+		Use the command:
+		ls -l
+		
+		
+		Example output:
+		- rwx r-x r--  1 Infra_team Infra_team  4096 Nov 13 09:00 script.sh
+		
+		
+		Let’s break that down:
+		
+		- rwx r-x r--  1 Infra_team Infra_team  4096 Nov 13 09:00 script.sh
+		| |   |   |
+		| |   |   └── others
+		| |   └────── group
+		| └────────── owner
+		└──────────── file type (- for file, d for directory)
+		
+		
+		So:
+		
+		Owner: rwx → read, write, execute
+		Group: r-x → read, execute
+		Others: r-- → read only
+		
+4.Changing Permissions (chmod)
+		Using Symbolic Mode
+		
+		Example:
+		chmod u+x file.sh   # give execute permission to owner
+		chmod g-w file.txt  # remove write permission from group
+		chmod o=r file.txt  # others can only read
+		
+		Using Numeric (Octal) Mode
+		Each permission type has a number:
+		Permission	Value
+		r	4
+		w	2
+		x	1
+		
+		Add them up for each group:
+		Example	Meaning
+		7 = 4+2+1 = rwx	
+		6 = 4+2 = rw-	
+		5 = 4+1 = r-x	
+		4 = 4 = r--	
+		
+		So:
+		chmod 755 script.sh
+		
+		means:
+		Owner: 7 (rwx)
+		Group: 5 (r-x)
+		Others: 5 (r-x)
+		
+5.Changing Ownership
+		Each file also has an owner and group.
+		View it:
+		ls -l
+		
+		
+		Example:
+		-rw-r--r-- 1 Devops_Guy Infra_team file.txt
+		Here, Devops_Guy is the owner and Infra_team is the group.
+		
+		Change them:
+		
+		sudo chown <Owner_name> <file_name> or <folder_name>
+		sudo chown Linux_Guy file.txt      		# change owner
+		sudo chown :admins file.txt   			# change group
+		sudo chown Linux_Guy:admins file.txt  	# change both
+
+
+
+Task Description : Task Description : Granting Executable Permissions to a Script
+
+Giving a script executable permissions is essential when you want users—or all users—to be able to run it. In Linux, even if a file exists and contains valid commands, it cannot be executed until the correct permissions are applied. This task ensures that the /tmp/xfusioncorp.sh script can be executed by anyone on the system.
+
+Why this is Important
+1. Execution requires permission
+
+Linux does not automatically allow files to run.
+A script must have the executable bit set (x) before it can be executed.
+
+2. Allows controlled access
+
+Granting executable permissions ensures the script can be run by the intended users.
+In this task, all users must be able to execute it, so permissions must be broad enough.
+
+3. Best for shared environments
+
+If multiple users or teams need to run the same script, granting execute rights makes collaboration smoother.
+It prevents errors like:
+
+permission denied: ./xfusioncorp.sh
+
+4. Does not give edit or delete access
+
+Giving everyone execute permissions does not allow them to modify the script.
+This keeps the script safe while still accessible.
+
+
+Step 1 : Verify the file exists
+ls -l /tmp/xfusioncorp.sh
+
+If it exists but lacks execute permission, the output will look like:
+Output : -rw-r--r-- 1 root root ... /tmp/xfusioncorp.sh
+
+Step 3: Grant execute permissions to all users
+Use the chmod command to give owner, group, and others execute (x) permissions:
+
+sudo chmod a+x /tmp/xfusioncorp.sh
+Here:
+
+-> a = all users
+-> +x = add execute permission
+
+
+Step 4 : Verify the permission of a file
+ls -l /tmp/xfusioncorp.sh
+Output : -rwxr-xr-x 1 root root ... /tmp/xfusioncorp.sh
+
+Step 5: Test the script
+Any user should now be able to run the script using:
+/tmp/xfusioncorp.sh
