@@ -1,0 +1,118 @@
+What is SELinux ?
+SELinux (Security-Enhanced Linux) is a Linux kernel security module that provides mandatory access control (MAC). 
+It enforces strict rules on how processes, users, and files interact, reducing the impact of misconfigurations or compromised applications.
+
+
+In Simple way : 
+
+SELinux adds an extra security layer by defining:
+
+What actions a process can perform
+Which files a process can access
+Which network ports/services it can interact with
+It uses policies to enforce this. Even root is restricted.
+
+Example:
+Apache web server normally reads website files.
+Without SELinux, if Apache is hacked, it could read other files on your server.
+With SELinux, Apache cannot read anything outside its allowed folder.
+
+Policies : define what is allowed. 
+
+Major types are:
+Targeted – only selected services are restricted (most common)
+Strict   – everything is confined
+MLS      – multi-level security (used for high-security environments)
+
+Modes:
+
+1:Enforcing – SELinux rules are enforced
+2:Permissive – Violations are logged but not blocked
+3:Disabled – SELinux is turned off
+
+
+SELinux is widely used in production environments where security is critical
+
+1. Enterprise Linux servers : RHEL, CentOS, AlmaLinux, and Fedora ship with SELinux enabled by default.
+
+2. Web hosting : Prevents compromised services (e.g., Apache, Nginx) from accessing sensitive files.
+
+3. Databases   : SELinux restricts MySQL/PostgreSQL to specific directories and ports.
+
+4. Container platforms
+	Podman uses SELinux labels for container isolation
+	OpenShift (Red Hat's Kubernetes) relies heavily on SELinux to isolate pods
+5. Security-critical environments : 
+	Government, finance, healthcare, and telecommunication systems.
+	
+Without SELinux :
+
+       │   Apache   │
+       └─────┬──────┘
+             │
+             ▼
+    ┌────────────────────┐
+    │ Entire File System │
+    └────────────────────┘
+
+With SELinux : 
+
+       │   Apache   │
+       └─────┬──────┘
+             │  SELinux Policy Says:
+             │  "Apache can only read web files"
+             ▼
+       ┌──────────────┐
+       │ Allowed Zone │
+       └──────────────┘
+
+       ┌──────────────┐
+       │ Blocked Zone │  ← Apache cannot enter
+       └──────────────┘	
+	   
+What Happens When Something is Blocked?
+
+Program tries action
+       │
+       ▼
+ SELinux checks policy
+       │
+ ┌─────┴───────┐
+ │ Allowed?     │
+ ├──────────────┤
+ │ YES → Action continues
+ │ NO  → Block + Log
+ └──────────────┘
+ 
+
+One more example to understand about SELinux :
+
+ 
+	/var/www/html  → label: httpd_sys_content_t      (Apache area)
+	/var/lib/mysql → label: mysqld_db_t              (MySQL area)
+	/home/user     → label: user_home_t              (Your personal area)
+	
+	
+	Apache guest enters → Security Guard  
+	Shows badge (httpd_t)  
+	Guard checks room label (httpd_sys_content_t)
+	If badge matches the allowed room → let in 🚪
+	If badge does NOT match → BLOCK ❌
+	
+	
+
+
+Task Description :  SElinux Installation and Configuration
+
+	
+Step 1:	Check if SELinux tools exist	
+		command : rpm -qa | grep selinux
+		
+Step 2:	Install SELinux by below command
+		sudo dnf install -y selinux-policy selinux-policy-targeted policycoreutils policycoreutils-python-utils
+Step 3: Check the config file 
+		command: /etc/selinux/config
+
+Step 4: sestatus   ---It will tells about SELinux is in 
+		Output : SELinux status:                 disabled  
+Step 5: sudo vi /etc/selinux/config    ---Edit config file and set it according to the task
