@@ -1,0 +1,66 @@
+What is a cron job in Linux?
+
+A cron job is a scheduled task in Linux that runs automatically at specified intervals.
+Cron is managed by the cron daemon (crond), which constantly checks the schedule defined in cron configuration files (crontabs) 
+and runs commands or scripts at the correct time.
+
+Use case:
+
+Used for automation (backups, cleanup tasks, monitoring, scripts).
+Schedules are defined in a file called crontab.
+Each user (including root) can have their own crontab.
+Runs in the background via the crond service.
+
+
+Crontab time format:
+
+*  *  *  *  *
+|  |  |  |  |
+|  |  |  |  └── Day of week (0–7)
+|  |  |  └──── Month (1–12)
+|  |  └─────── Day of month (1–31)
+|  └────────── Hour (0–23)
+└───────────── Minute (0–59)
+
+
+
+
+
+
+Cron examples :
+
+=>	How to check if the cron package is installed
+	Command : rpm -q cronie
+	Output  : cronie-1.5.7-14.el9.x86_64   (If installed it will show output with cron information)
+		
+=>	Install cronie package (commands might vary check your distro and install required packages according to them)
+	Command :sudo dnf install cronie	
+			:sudo systemctl start crond             ----> Cron service start
+			:sudo systemctl enable crond	        ----> Cron service enabled
+			
+		start  :will start the cron daemon only for the current session (until the next reboot).
+	    enable :If the server reboots, the cron daemon will NOT start automatically unless you enable it.	
+				
+				
+=>	List cron jobs for the current user
+	Command :crontab -l
+=>	List cron jobs for a specific user - (You need root privileges.)
+	Command : sudo crontab -l -u username
+	
+	
+Task Description :  Install cronie package on all app servers and start crond service.
+a. Install cronie packages 
+b. Add a cron */5 * * * * echo hello > /tmp/cron_text for root user.	
+
+
+Step 1: 
+		Command : crontab -e
+				  echo "*/5 * * * * echo hello > /tmp/cron_text"
+			
+			 (or ) 
+			
+		Command : echo "*/5 * * * * echo hello > /tmp/cron_text" >> /var/spool/cron/root      -----> Cron entry (Not recomended)
+
+Step 2: Verify the cron jobs by below mentioned commands
+
+Command : crontab -l
