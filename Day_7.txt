@@ -1,0 +1,77 @@
+SSH authentication on Linux refers to the methods used to verify the identity of a user or system when connecting via SSH (Secure Shell).
+SSH is a protocol used to securely access remote machines, run commands, and transfer files.
+
+
+What SSH Authentication Is ?
+
+When you connect to a Linux server using SSH, the server needs to confirm who you are. This verification process is SSH authentication.
+SSH provides secure, encrypted communication and supports multiple authentication methods.
+
+"Common SSH Authentication Methods "
+1. 	Password Authentication
+	You log in by typing a username and password.
+	Simple but less secure.
+	Can be disabled for improved security.
+
+2.	Public Key Authentication (most common & recommended)
+	You generate a key pair:
+	Private key → kept on your local machine.
+	Public key  → stored on the server in ~/.ssh/authorized_keys.
+    During login:
+	The server checks if your private key matches the public key.
+	More secure and convenient (can use passphrases or agents like ssh-agent).
+
+3. 	Host-Based Authentication
+	Machines authenticate each other instead of individual users.
+	Used mostly in trusted internal networks.
+
+4. 	Keyboard-Interactive Authentication
+	Prompts for multiple forms of verification.
+	Often used with 2FA/MFA.
+	
+5. 	GSSAPI / Kerberos Authentication
+	Enterprise authentication using centralized systems (like Active Directory or Kerberos).
+	
+Where SSH Auth is Configured ?
+Configuration file: /etc/ssh/sshd_config  (path )
+
+
+Why SSH Authentication Matters ?
+
+	Protects against unauthorized access.
+	Prevents password guessing/bruteforce attacks when using keys.
+	Enables automation (scripts, deployments) securely.
+	
+	
+Task Description :  Linux SSH Authentication - Settingup a passwordless authentication login
+	
+STEP 1:	Make an SSH key for thor (one-time only)
+		Command:ssh-keygen
+
+What it means:
+
+Creates a “magic login key” for thor.
+Just press ENTER 3–4 times.
+
+It creates two files:
+id_rsa → secret key (keep safe)
+id_rsa.pub → public key (share with servers)
+
+STEP 2:	Send thor’s public key to tony on stapp01
+		Command:ssh-copy-id tony@stapp01
+
+What it means:
+Connect to stapp01 as user tony
+Copy thor’s public key into tony’s authorized_keys
+This makes password-less login work
+
+You will enter tony’s password one last time: Prompt password
+
+
+
+STEP 3:	Test the password-less login
+		Command:ssh tony@stapp01
+
+What it means:
+Try to log in to stapp01 as tony
+If the key was installed, no password will be asked
