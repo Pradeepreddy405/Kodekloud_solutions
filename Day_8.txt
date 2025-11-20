@@ -1,0 +1,68 @@
+What is ansible ?
+
+Ansible is an open-source IT automation tool used to configure systems, deploy software, and manage infrastructure through simple,
+human-readable instructions.
+
+
+Things can perform using ansible across remote server :
+
+Install and Configure Software
+		Install packages like Nginx, MySQL, Docker, etc.
+		Manage configuration files and ensure services are running.
+		Apply consistent setup across many servers at once.
+
+Manage Users and Permissions
+		Create or remove user accounts.
+		Set SSH keys.
+		Control sudo privileges and security policies.
+
+Automate Cloud Resources
+		Provision and configure servers in AWS, Azure, and GCP.
+		Manage load balancers, storage, security groups, and more.
+		Integrate with infrastructure-as-code workflows.
+
+Orchestrate Multi-Step Deployments
+		Deploy applications with multiple steps (build → copy → configure → start services).
+		Coordinate changes across many machines in a specific order.
+		Enable zero-downtime rolling updates.
+
+Enforce Consistent Configuration Across Servers
+		Ensure all servers always match the desired configuration.
+		Detect configuration drift and automatically correct it.
+		Keep large fleets standardized and compliant.
+
+
+
+
+Install Python 3 and pip3
+		cmd: sudo dnf install -y python3 python3-pip
+		Installs Python 3 and the pip3 package manager from CentOS repositories.
+		Required before installing Ansible via pip.
+		
+Upgrade pip, setuptools, and wheel
+		cmd: sudo pip3 install --upgrade pip setuptools wheel
+		Upgrades pip and its build tools to the latest versions.
+		Ensures smooth installation of older Ansible versions like 4.8.0.
+		
+(Optional) Reinstall pip3
+		cmd: sudo dnf install -y python3-pip
+		Ensures pip3 is properly installed for all users.
+		Sometimes used to fix PATH inconsistencies.
+		
+Verify the location of pip3
+		cmd: which pip3
+		Example output: /usr/local/bin/pip3
+		Shows where pip3 is installed.
+		Root may not have this directory in its PATH, so we will use the full path.
+		
+Install Ansible 4.8.0 globally using pip3
+		cmd: sudo /usr/local/bin/pip3 install ansible==4.8.0
+		Installs Ansible 4.8.0 system-wide.
+		Installing via /usr/local/bin/pip3 ensures root uses the correct pip3 binary.
+		Binaries like ansible, ansible-playbook, etc., are placed in /usr/local/bin, which is usually available to all system users.
+		
+Verify Ansible installation
+		cmd: ansible --version
+
+
+Confirms that Ansible 4.8.0 is installed and globally accessible.
